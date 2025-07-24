@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Label Roll Mockup Generator</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #d1e8ff, #fef6e4);
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      color: #0074cc;
+    }
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      background: #ffffffdd;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 15px;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    button {
+      background-color: #0074cc;
+      color: white;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    button:hover {
+      background-color: #005fa3;
+    }
+    .preview {
+      text-align: center;
+      margin-top: 30px;
+    }
+    .preview img {
+      width: 300px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: all 0.3s ease-in-out;
+    }
+  </style>
+</head>
+<body>
+  <h1>Label Roll Visual Configurator</h1>
+  <div class="container">
+    <label for="core">Select Core Diameter:</label>
+    <select id="core">
+      <option value="76">76 mm (3")</option>
+      <option value="40">40 mm (1.57")</option>
+      <option value="25.4">25.4 mm (1")</option>
+      <option value="19">19 mm (0.75")</option>
+    </select>
+
+    <label for="width">Label Width (mm):</label>
+    <input type="number" id="width" placeholder="e.g., 100" />
+
+    <label for="height">Label Height (mm):</label>
+    <input type="number" id="height" placeholder="e.g., 170" />
+
+    <label for="quantity">Quantity per Roll:</label>
+    <input type="number" id="quantity" placeholder="e.g., 800" min="200" />
+
+    <button onclick="updatePreview()">Generate Mockup</button>
+
+    <div class="preview">
+      <h3>Mockup Preview:</h3>
+      <img id="mockup" src="label_roll_core_76mm.png" alt="Label Roll Preview">
+    </div>
+  </div>
+
+  <script>
+    function updatePreview() {
+      const core = document.getElementById('core').value;
+      const width = parseInt(document.getElementById('width').value);
+      const height = parseInt(document.getElementById('height').value);
+      const quantity = parseInt(document.getElementById('quantity').value);
+
+      const imageMap = {
+        "76": "images/label_roll_core_76mm.png",
+        "40": "images/label_roll_core_40mm.png",
+        "25.4": "images/label_roll_core_25_4mm.png",
+        "19": "images/label_roll_core_19mm.png"
+      };
+      function calculateOuterDiameter(coreDiameter, labelWidth, labelHeight, qty) {
+    const labelArea = labelWidth * labelHeight * qty; // in mm²
+    const coreRadius = coreDiameter / 2;
+    const rollThickness = Math.sqrt(labelArea / Math.PI + Math.pow(coreRadius, 2)) - coreRadius;
+    return (rollThickness + coreRadius) * 2;
+  }
+
+
+  const imagePath = imageMap[core] || "label_roll_core_76mm.png";
+  document.getElementById('mockup').src = imagePath;
+}
+</script>
+</body>
+</html>
